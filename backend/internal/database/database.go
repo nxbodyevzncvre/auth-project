@@ -15,7 +15,7 @@ const (
 	dbname   = "postgres"
 )
 
-func connectDB() error {
+func connectDBase() error {
 	var err error
 	db, err = sql.Open("postgres", fmt.Sprintf("host = %s port = %d user = %s password = %s dbname = %s sslmode = disable", host, port, user, password, dbname))
 

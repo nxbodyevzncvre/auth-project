@@ -1,4 +1,4 @@
-package app
+package main
 
 import (
 	"log"
@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-	if err := connectDB(); err != nil {
+	if err := database.connectDBase(); err != nil {
 		log.Fatal(err)
 
 	}
