@@ -5,8 +5,10 @@ const (
 	port     = 5432
 	user     = "postgres"
 	password = "admin"
-	dbname   = "users"
+	dbname   = "postgres"
 )
+
+var jwtSecretKey = []byte("pd[asfckjiogiotijt]")
 
 type (
 	User struct {
@@ -14,9 +16,14 @@ type (
 		Password string `json:"password"`
 	}
 
+	AuthStorage struct {
+		DB *Users
+	}
+
 	Users struct {
 		Users map[string]User
 	}
+
 	DBConfig struct {
 		Host     string
 		Port     int
@@ -24,19 +31,26 @@ type (
 		Password string
 		Dbname   string
 	}
+
 	Config struct {
 		DB *DBConfig
+	}
+
+	LoginResponse struct{
+		AccessToken string `json:"access_token"`
 	}
 )
 
 func GetConfig() *Config {
 	return &Config{
 		DB: &DBConfig{
-			Host:     host,
-			Port:     port,
-			User:     user,
-			Password: password,
-			Dbname:   dbname,
+			Host:     "localhost",
+			Port:     5432,
+			User:     "postgres",
+			Password: "admin",
+			Dbname:   "postgres",
 		},
 	}
 }
+
+
