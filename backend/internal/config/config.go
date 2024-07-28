@@ -17,4 +17,26 @@ type (
 	Users struct {
 		Users map[string]User
 	}
+	DBConfig struct {
+		host     string
+		port     int
+		user     string
+		password string
+		dbname   string
+	}
+	Config struct {
+		DB *DBConfig
+	}
 )
+
+func getConfig() *Config {
+	return &Config{
+		DB: &DBConfig{
+			host:     host,
+			port:     port,
+			user:     user,
+			password: password,
+			dbname:   dbname,
+		},
+	}
+}
