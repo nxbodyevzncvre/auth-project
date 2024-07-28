@@ -10,33 +10,33 @@ const (
 
 type (
 	User struct {
-		Username string `json: "username"`
-		Password string `json: "password"`
+		Username string `json:"username"`
+		Password string `json:"password"`
 	}
 
 	Users struct {
 		Users map[string]User
 	}
 	DBConfig struct {
-		host     string
-		port     int
-		user     string
-		password string
-		dbname   string
+		Host     string
+		Port     int
+		User     string
+		Password string
+		Dbname   string
 	}
 	Config struct {
 		DB *DBConfig
 	}
 )
 
-func getConfig() *Config {
+func GetConfig() *Config {
 	return &Config{
 		DB: &DBConfig{
-			host:     host,
-			port:     port,
-			user:     user,
-			password: password,
-			dbname:   dbname,
+			Host:     host,
+			Port:     port,
+			User:     user,
+			Password: password,
+			Dbname:   dbname,
 		},
 	}
 }
