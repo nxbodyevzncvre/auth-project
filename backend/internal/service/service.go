@@ -9,6 +9,7 @@ import (
     jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/sirupsen/logrus"
 	"time"
+	"log"
 )
 
 type AuthHandler struct{
@@ -22,7 +23,7 @@ func NewAuthHandler() *AuthHandler{
 		authStorage: &config.AuthStorage{DB: &config.Users{Users: make(map[string]config.User)}},
 	}
 }
-var jwtSecretKey = []byte("foapfaophjfdm")
+
 
 func (h *AuthHandler) Register(c *fiber.Ctx) error{
 	if db.DB == nil{
@@ -87,11 +88,64 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error{
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, payload)
 	
 	
-	t, err := token.SignedString(jwtSecretKey)
+	t, err := token.SignedString(config.JwtSecretKey)
 	if err != nil{
 		logrus.WithError(err).Error("JWTT token signing")
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 
 	return c.JSON(config.LoginResponse{AccessToken: t})
+}
+
+
+func JwtPayloadFromRequest (c *fiber.Ctx) (jwt.MapClaims, bool){
+	jwtToken, ok := c.Context().Value(config.ContextKeyUser).(*jwt.Token)
+	if !ok {
+		logrus.WithFields(logrus.Fields{
+			"jwt_token_context_value": c.Context().Value(config.ContextKeyUser),
+
+		}).Error("wrong type of jwt token in Context")
+		return nil, false
+	} 
+	payload, ok := jwtToken.Claims.(jwt.MapClaims)
+	
+	if !ok{
+		logrus.WithFields(logrus.Fields{
+			"jwt_token_claims": jwtToken.Claims,
+		}).Error("wrong type of jwt token claims")
+		return nil, false
+	}
+	return payload, true
+
+}
+
+func (h *AuthHandler) Profile(c *fiber.Ctx) error{
+	jwtPayload, ok := JwtPayloadFromRequest(c)
+	if !ok{
+		return c.SendStatus(fiber.StatusUnauthorized)
+
+	}
+	rows, err := db.DB.Query("SELECT username FROM users WHERE username = $1", jwtPayload["sub"])
+	if err != nil {
+		return c.SendString("User not found")
+	}
+
+	
+	defer rows.Close()
+	var username string
+	for rows.Next(){
+		err:= rows.Scan(&username)
+		if err != nil{
+			log.Fatal(err)
+		}
+	}
+	
+	if err = rows.Err(); err != nil{
+		log.Fatal(err)
+	}
+	return c.JSON(config.ProfileResponse{
+		Username: username,
+	})
+
+
 }

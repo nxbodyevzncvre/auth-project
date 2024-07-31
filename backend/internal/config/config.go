@@ -8,8 +8,8 @@ const (
 	dbname   = "postgres"
 )
 
-var jwtSecretKey = []byte("pd[asfckjiogiotijt]")
-
+var JwtSecretKey = []byte("pd[asfckjiogiotijt]")
+var ContextKeyUser = "user"
 type (
 	User struct {
 		Username string `json:"username"`
@@ -30,6 +30,9 @@ type (
 		User     string
 		Password string
 		Dbname   string
+	}
+	ProfileResponse struct{
+		Username string `json:"username"`
 	}
 
 	Config struct {
