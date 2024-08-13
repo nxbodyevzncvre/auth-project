@@ -40,7 +40,7 @@ type (
 	}
 
 	LoginResponse struct{
-		AccessToken string `json:"access_token"`
+		Token string `json:"access_token"`
 	}
 )
 

@@ -94,7 +94,7 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error{
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 
-	return c.JSON(config.LoginResponse{AccessToken: t})
+	return c.JSON(config.LoginResponse{Token: t})
 }
 
 
