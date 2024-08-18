@@ -1,0 +1,110 @@
+/* .italiana-regular {
+    font-family: "Italiana", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+   */
+
+/* 
+   .ingrid-darling-regular {
+    font-family: "Ingrid Darling", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+   */
+
+   /* .crimson-text-regular {
+    font-family: "Crimson Text", serif;
+    font-weight: 400;
+    font-style: normal;
+  } */
+
+  *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+.header{
+    position:relative;
+    display:flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 1em 2em;
+
+
+}
+
+.logo-container{
+    display: flex;
+    justify-content:flex-end;
+    margin-left: auto;
+}
+
+.logo{
+    width: 150px;
+    height: 200px;
+}
+
+.culina-name{
+    flex-shrink:0;
+    margin-right: 1em;
+    width: auto;
+    margin-left: 3vw;
+}
+
+.culina{
+    font-family: "Ingrid Darling", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size:40px;
+    margin: 0;
+    padding: 0;
+    
+}
+
+.middle{
+    gap:3.3125em;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-grow:1;
+
+}
+
+.middle a {
+    text-decoration: none;
+    font-family: "Italiana", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    color:#000000;
+    margin: 0;
+    padding: 0.5em 1em;
+    border: 1px solid transparent ;
+    transition: 0.4s ease;
+    position: relative;
+        
+}
+
+.middle a::before{
+    content: "";
+    position:absolute;
+    bottom:0;
+    left:0;
+    width: 0;
+    height: 1px;
+    background-color: #000000;
+    z-index: -1; 
+    transition: width 0.8s ease-in-out; 
+}
+
+.middle a:hover::before{
+    width:100%;
+    transform: scale(1.05)
+}
+.middle a:hover{
+    transform: scale(1.05)
+}
+  

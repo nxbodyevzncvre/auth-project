@@ -1,0 +1,79 @@
+
+/* .italiana-regular {
+    font-family: "Italiana", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+   */
+
+/* 
+   .ingrid-darling-regular {
+    font-family: "Ingrid Darling", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+   */
+
+   /* .crimson-text-regular {
+    font-family: "Crimson Text", serif;
+    font-weight: 400;
+    font-style: normal;
+  } */
+
+  *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+.form-signup{
+    margin-top: 8vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap:37px;
+}
+
+form .register{
+    font-family: "Italiana", sans-serif;
+    font-size: 3rem;
+    display:inline-block;
+    text-align: center;
+}
+
+input::placeholder{
+    font-size: 1ch;
+    font-family: "Montserrat", serif;
+    font-weight: 400;
+    font-style: normal;
+    padding: 0.5em 0.5em;
+}
+
+input{
+    font-family: "Montserrat", serif;
+    font-size: 1.5em;
+    border-radius:10px;
+    padding:0.2em;
+}
+
+form button{
+    font-family: "Montserrat", serif;
+    font-size: 1.5em;
+    border-radius:10px;
+    padding:0.2em;
+    background-color: black;
+    color:white;
+    padding:0.5em 2em;
+    cursor:pointer;
+    border: none;
+    transition: 0.4s ease;
+
+}
+
+form button:hover {
+    background-color: rgb(94, 93, 93);
+    border: none;
+    transform: scale(1.05);
+}
