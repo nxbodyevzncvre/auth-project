@@ -1,0 +1,91 @@
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+}
+
+.header-main{
+  display:flex;
+  justify-content: center;
+}
+
+.culina-logo{
+  width: auto;
+  height: 150px;
+  position:relative;
+
+}
+
+
+
+.middle-main{
+    gap:3.3125em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow:1;
+
+}
+
+.middle-main a {
+    text-decoration: none;
+    font-family: "Italiana", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    color:#000000;
+    margin: 0;
+    border: 1px solid transparent ;
+    transition: 0.4s ease;
+    position: relative;
+        
+}
+
+.middle-main a::before{
+    content: "";
+    position:absolute;
+    bottom:0;
+    left:0;
+    width: 0;
+    height: 1px;
+    background-color: #000000;
+    z-index: -1; 
+    transition: width 0.8s ease-in-out; 
+}
+
+.middle-main a:hover::before{
+    width:100%;
+    transform: scale(1.05)
+}
+.middle-main a:hover{
+    transform: scale(1.05)
+}
+
+
+.user-info{
+  width:320px;
+  display: flex;
+  flex-direction:row;
+  align-items: center;
+  gap:0.5em;
+  position:relative;
+  padding: 0 3vw;
+}
+.logo-svg{
+  width:70px;
+  height:70px;  
+}
+
+.user-name{
+  text-align:center;
+  font-size: 1.2em;
+}
+.user-amount{
+  font-size: 1em;
+}
+.user-data{
+  font-family: "Italiana", sans-serif;
+  font-weight: 800;
+}

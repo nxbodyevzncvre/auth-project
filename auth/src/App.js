@@ -8,8 +8,8 @@ import {
 
 import SignIn from "./components/SignIn/SignIn";
 import SignUp from './components/SignUp/SignUp';
-import Profile from "./components/MyProfile/Profile";
 import Greetings from "./components/Greetings/Greetings";
+import Main from './components/Main/Main';
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
           <Route path = "/" element = {<Greetings/>}></Route> 
           <Route path = "/sign-in" element = {<SignIn/>}></Route>
           <Route path = "/sign-up" element = {<SignUp/>}></Route>
-          <Route path = "/profile" element = {<Profile/>}></Route>
+          <Route path = "/main" element = {<Main/>}></Route>
        </Routes>
       </div>
     </BrowserRouter>
