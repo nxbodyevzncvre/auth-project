@@ -43,7 +43,7 @@ form .login{
     text-align: center;
 }
 
-input::placeholder{
+.form-signup input::placeholder{
     font-size: 1ch;
     font-family: "Montserrat", serif;
     font-weight: 400;
@@ -51,7 +51,7 @@ input::placeholder{
     padding: 0.5em 0.5em;
 }
 
-input{
+.form-signup input{
     font-family: "Montserrat", serif;
     font-size: 1.5em;
     border-radius:10px;

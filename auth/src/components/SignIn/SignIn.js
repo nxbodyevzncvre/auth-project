@@ -39,7 +39,7 @@ const SignIn = () =>{
     return(
         <div className="signin">
             <Header/>
-                <form className = "form-signin"onSubmit= {handleSubmit}>
+                <form className = "form-signin" onSubmit= {handleSubmit}>
                     <h1 className = "login">Login</h1>
                     <input 
                         type="text"

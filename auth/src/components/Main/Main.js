@@ -7,6 +7,7 @@ import {ReactComponent as Second} from "../assets/Slides/SecondSlide.svg"
 import {ReactComponent as Third} from "../assets/Slides/ThirdSlide.svg"
 import {ReactComponent as Fourth} from "../assets/Slides/FourthSlide.svg"
 import {ReactComponent as Fifth} from "../assets/Slides/FifthSlide.svg"
+import {ReactComponent as SearchLogo} from "../assets/Logos/search-logo.svg"
 import {AiOutlineArrowLeft, AiOutlineArrowRight} from "react-icons/ai"
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css"
@@ -71,13 +72,35 @@ const Main = () =>{
                     </div>            
                 </div>
             </div>
-            <section className = "container">
+            <section className = "main-section-container">
                 <Slider {...settings}>
                     {data.map((d) =>{
                         return d
                     })}
                 </Slider>
             </section>
+
+            <div className="recipe-finder-block">
+                    <div className="recipe-filter">
+                        <h2 className="recipe-name">Recipe</h2>
+                    </div>
+                    <div className="recipe-search-panel">
+                        <a href = "#" className = "search-logo-a">
+                            <SearchLogo className = "search-logo"/>
+                        </a>
+                       
+                        <input className="recipe-search" type="text" placeholder="search"/>
+                    </div>
+                    <div className="main-sort-by">
+                        <select name="sort">
+                            <optgroup label="Sort By">
+                                <option value="newest">Newest</option>
+                                <option value="latets">Latest</option>
+                                <option value="rating">Rating</option>
+                            </optgroup>
+                        </select>
+                    </div>
+            </div>
             
 
         </div>
