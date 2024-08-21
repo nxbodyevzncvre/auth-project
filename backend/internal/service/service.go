@@ -24,6 +24,26 @@ func NewAuthHandler() *AuthHandler{
 	}
 }
 
+func (h *AuthHandler) PostSvg(c *fiber.Ctx) error{
+	if db.DB == nil{
+		fmt.Printf("DB not initialized")
+		return c.Status(fiber.StatusInternalServerError).SendString("DB not initialized")
+	}
+	
+	svgs := config.Svg{}
+	if err := c.BodyParser(&svgs); err != nil{
+		return c.SendString(err.Error())
+	}
+
+	_, err := db.DB.Exec("INSERT INTO svgs (url) VALUES ($1)", svgs.Url)
+	if err != nil {
+		return c.SendString(err.Error())
+	}
+
+	return c.SendString("Success")
+
+}
+
 
 func (h *AuthHandler) Register(c *fiber.Ctx) error{
 	if db.DB == nil{
@@ -146,6 +166,4 @@ func (h *AuthHandler) Profile(c *fiber.Ctx) error{
 	return c.JSON(config.ProfileResponse{
 		Username: username,
 	})
-
-
 }

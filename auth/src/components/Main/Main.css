@@ -1,4 +1,14 @@
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
 
+body, html {
+  overflow-x: hidden;
+}
+
+.main-window{
+  max-width: 100vw;
+  overflow-x:hidden;
+}
 *{
   margin: 0;
   padding: 0;
@@ -59,10 +69,10 @@
     width:100%;
     transform: scale(1.05)
 }
+
 .middle-main a:hover{
     transform: scale(1.05)
 }
-
 
 .user-info{
   width:320px;
@@ -73,6 +83,7 @@
   position:relative;
   padding: 0 3vw;
 }
+
 .logo-svg{
   width:70px;
   height:70px;  
@@ -82,10 +93,54 @@
   text-align:center;
   font-size: 1.2em;
 }
+
 .user-amount{
   font-size: 1em;
 }
+
 .user-data{
   font-family: "Italiana", sans-serif;
   font-weight: 800;
 }
+.container svg{
+  position: relative;
+}
+.container{
+  padding: 0 2vw;
+}
+.slick-arrow.slick-next,
+.slick-arrow.slick-prev{
+  position:absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  height:60px;
+  width:60px;
+  z-index:1;
+  margin: 0 2vw;
+}
+
+.slick-arrow.slick-next:hover,
+.slick-arrow.slick-prev:hover
+{
+
+    opacity:1;
+}
+
+
+.slick-prev::before,.slick-next::before{
+   display:none;
+    
+    }
+
+.arrows{
+height:20px;
+width:20px;
+margin: 1px;
+
+}
+
+
+
+

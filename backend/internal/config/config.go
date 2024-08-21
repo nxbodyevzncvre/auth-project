@@ -16,6 +16,10 @@ type (
 		Password string `json:"password"`
 	}
 
+	Svg struct{
+		Url string `json:"url"`
+	}
+
 	AuthStorage struct {
 		DB *Users
 	}

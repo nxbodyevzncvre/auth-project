@@ -26,7 +26,8 @@ func main() {
 	
 	app.Post("/register", authHandlers.Register)
 	app.Post("/login", authHandlers.Login)
-
+	app.Post("/svg", authHandlers.PostSvg)
+	
 	authtorizedGroup := app.Group("")
 	authtorizedGroup.Use(jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{
