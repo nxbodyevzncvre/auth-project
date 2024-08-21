@@ -1,4 +1,5 @@
-import "./Main.css";
+import "./Main.css"
+import Card from "./Card/Card"
 import {ReactComponent as Logo_title} from "../assets/Logos/logo_title.svg"
 import {ReactComponent as Delete_asap} from "../assets/negr.svg"
 import Slider from "react-slick";
@@ -88,7 +89,6 @@ const Main = () =>{
                         <a href = "#" className = "search-logo-a">
                             <SearchLogo className = "search-logo"/>
                         </a>
-                       
                         <input className="recipe-search" type="text" placeholder="search"/>
                     </div>
                     <div className="main-sort-by">
@@ -101,8 +101,36 @@ const Main = () =>{
                         </select>
                     </div>
             </div>
-            
 
+            <div className="main-block">
+                <div className="main-filter-block">
+                    <div className="main-filter-block-top">
+                        <h2 className="main-filter-block-title">Filter by:</h2>
+                        <a href="#" className="main-filter-block-clear">clear filters</a>
+                    </div>
+                    <div className="select-filter">
+                        <div className="choose-filter">
+                            <h2 className="choose-filter-name">Difficult:</h2>
+                            <p>plus</p>
+                        </div>
+                        <div className="choose-filter">
+                            <h2 className="choose-filter-name">Meal:</h2>
+                            <p>plus</p>
+                        </div>
+                        <div className="choose-filter">
+                            <h2 className="choose-filter-name">Time:</h2>
+                            <p>plus</p>
+                        </div>
+                        <div className="choose-filter">
+                            <h2 className="choose-filter-name">Dish-type:</h2>
+                            <p>plus</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="main-card-block">
+                    <Card/>
+                </div>
+            </div>
         </div>
     );
 }
