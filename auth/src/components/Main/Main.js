@@ -31,13 +31,11 @@ const Main = () =>{
         )
     }
     useEffect(() =>{
-        const token = localStorage.getItem("token");
-        if (!token){
+        const token = localStorage.getItem("token")
+        if ( token === "undefined" || token === null || !token){
             navigate("/")
             console.log("you are not authorized")
         }
-        console.log("everything is fine salam")
-        console.log(token)
     }, [])
     const NextArrow = (props) =>{
         const {className, style, onClick} = props;
