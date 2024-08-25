@@ -1,0 +1,45 @@
+.filter-wrapper {
+    margin: 2vh 0;
+}
+
+.filter-button {
+    display: flex;
+    justify-content: space-between;
+    cursor:pointer;
+}
+
+.filter-name {
+    font-size: 20px;
+}
+
+.filter-btn {
+    font-size: 20px;
+}
+
+.plus {
+    margin: 0;
+    padding: 0;
+    width: 1vw;
+    height: 2vh;
+}
+
+.minus {
+    width: 1vw;
+    height: 2vh;
+}
+
+.filter-elements {
+    display: flex;
+    justify-content: space-between;
+    height: 30px;
+}
+
+.select-box {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #000;
+    cursor: pointer;
+    text-align: center;
+    font-weight: 500;
+}
+

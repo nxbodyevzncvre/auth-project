@@ -1,4 +1,5 @@
 import "./Greetings.css"
+import {useNavigate} from 'react-router-dom'
 import {ReactComponent as Chef} from "../assets/Chef Prepares Food.svg"
 import {ReactComponent as Stars} from "../assets/stars.svg"
 import {ReactComponent as Negr} from "../assets/negr.svg"
@@ -8,6 +9,21 @@ import {ReactComponent as Copyright} from "../assets/copyright.svg"
 import {ReactComponent as Logo} from "../assets/Frame 6.svg"
 
 const Greetings = () =>{
+    
+    const navigate = useNavigate();
+
+    const aboutRedirect = () => {
+        navigate("/")
+    }
+
+    const recieptsRedirect = () => {
+        navigate("/main")
+    }
+
+    const getStartRedirect = () => {
+        navigate("/sign-up")
+    }
+
     return(
         <div className="greetings"> 
 
@@ -16,12 +32,12 @@ const Greetings = () =>{
                     <h1 className="culina">Culina</h1>
                 </div>
                 <div className="middle">
-                    <a href="#">About</a>
-                    <a href="#">Recipes</a>
+                    <a onClick={() => {aboutRedirect()}}>About</a>
+                    <a onClick={() => {recieptsRedirect()}}>Recipes</a>
                     <a href="#">Pricing</a>
                 </div>
                 <div className="get-start">
-                    <button>Get Started</button>            
+                    <button onClick={() => {getStartRedirect()}}>Get Started</button>            
                 </div>
             </div>
             
@@ -54,7 +70,7 @@ const Greetings = () =>{
                 </div>
                 <div className="info-right-side">
                     <h2 className="info-right-side-text">Let's cook <br/> together!</h2>
-                    <button className="info-right-side-btn">Join us</button>
+                    <button className="info-right-side-btn" onClick={() => {getStartRedirect()}}>Join us</button>
                 </div>
             </div>
 

@@ -10,10 +10,22 @@ const (
 
 var JwtSecretKey = []byte("pd[asfckjiogiotijt]")
 var ContextKeyUser = "user"
+
 type (
+
 	User struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
+		Email    string `json:"email"`
+	}
+
+	Card struct {
+		Id			 int `json:"id"`
+		Dish_name    string `json:"dish_name"`
+		Dish_rating  int    `json:"dish_rating"`
+		Dish_creator string `json:"dish_creator"`
+		Dish_descr   string `json:"dish_descr"`
+		Dish_types   string `json:"dish_types"`
 	}
 
 	Svg struct{

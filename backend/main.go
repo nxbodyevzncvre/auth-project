@@ -26,15 +26,14 @@ func main() {
 	
 	app.Post("/register", authHandlers.Register)
 	app.Post("/login", authHandlers.Login)
-	app.Post("/svg", authHandlers.PostSvg)
-	
+	app.Post("/create-card", authHandlers.PostCard)
+	app.Get("/cards", service.GetAllCards)
 	authtorizedGroup := app.Group("")
 	authtorizedGroup.Use(jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{
 			Key: config.JwtSecretKey,
 		},
 		ContextKey: config.ContextKeyUser,
-
 	}))
 
 	authtorizedGroup.Get("/profile", authHandlers.Profile)

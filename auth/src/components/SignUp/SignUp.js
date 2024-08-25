@@ -1,38 +1,43 @@
 import "./SignUp.css"
 import { useState } from "react"
+import {useNavigate} from "react-router-dom"
 import Header from "../Header/Header";
+import axios from "axios";
 
 const SignUp = () =>{
     const [email, setEmail] = useState("")
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
-    const handleSubmit = (e) =>{
+    const [exists, setExists] = useState('not-exists')
+    const navigate = useNavigate();
+    const loginRedirect = () =>{
+        navigate("/sign-in")
+    }
+    const handleSubmit = async(e) =>{
         e.preventDefault();
         const data = {
             Username: username,
-            Email: email,
-            Password: password};
+            Password: password,
+            Email: email
+        };
         console.log(data)
-        fetch("http://localhost:8080/register", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(() =>{
-            console.log("success")
-        })
-        .catch((err)=>{
-            console.error("USER ALREADY EXISTS", err)
-        })
-        
+        try{
+            const response = await axios.post("http://localhost:8080/register", {username, password, email});
+            if (response.data === "E-mail already exists"){
+                console.error("Email already exists")
+                setExists("exists")
+                return
+            }
+            navigate("/sign-in")
+        }catch(error){
+            console.log(`${error}`)
+        }
+    
 }
     return(
         <div className="signup">
         <Header/>
-            <form className = "form-signup"onSubmit= {handleSubmit}>
+            <form className = "form-signup" onSubmit= {handleSubmit}>
                 <h1 className = "register">Sign Up</h1>
                 <input 
                     type="text"
@@ -61,8 +66,9 @@ const SignUp = () =>{
                         setPassword(e.target.value)
                     }}
                     className="input-password" />
-                <button type="submit">Login</button>
-                <p>Already have an account? <a className = "forgot-password" href = "#">click here</a></p>
+                <button type="submit">Sign up</button>
+                <div className={exists}>User already exists</div>
+                <p>Already have an account? <a className = "forgot-password" onClick={() => loginRedirect()}>click here</a></p>
             </form> 
     </div> 
     )

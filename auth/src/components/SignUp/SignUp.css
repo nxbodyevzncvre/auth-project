@@ -51,7 +51,7 @@ form .register{
     padding: 0.5em 0.5em;
 }
 
-.fomr-signup input{
+.form-signup input{
     font-family: "Montserrat", serif;
     font-size: 1.5em;
     border-radius:10px;
@@ -76,4 +76,21 @@ form button:hover {
     background-color: rgb(94, 93, 93);
     border: none;
     transform: scale(1.05);
+}
+
+.exists{
+    color:red;
+    font-family: "Montserrat", sans-serif;
+    display:block;
+}
+
+.not-exists {
+    display: none;
+    color:red;
+    font-family: "Montserrat", sans-serif;
+}
+.forgot-password{
+    color:blue;
+    text-decoration: underline;
+    cursor:pointer;
 }

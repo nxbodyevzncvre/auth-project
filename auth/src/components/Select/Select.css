@@ -1,0 +1,42 @@
+.button-sort{
+    background-color:#D9D9D9;
+    border: 2px #111 bold;
+    border-radius: 1rem;
+    padding: 1rem 1rem;
+    margin-bottom: 3px;
+    width: 110px;
+    cursor: pointer;
+    text-align:center;
+    transition: 0.5s ease;
+}
+
+.wrapper {
+    font-family: "Montserrat", sans-serif;
+}
+
+.select-inside {
+    position: absolute;
+    border-radius: 12px;
+    overflow: overlay;
+    cursor:pointer;
+}
+
+.select-inside > * {
+    padding: 1vh 1vw;
+    width: 110px;
+    background-color: #D9D9D9;
+    border-bottom: 1px solid #000;
+    cursor: pointer;
+    transition: 0.5s ease;
+}   
+
+.select-inside :last-child {
+    border-bottom: none;
+}
+
+.select-inside > *:hover{
+    background-color: #cdcbcb;
+}
+.button-sort:hover {
+    background-color: #cdcbcb;
+}

@@ -1,5 +1,9 @@
 import "./Main.css"
 import Card from "./Card/Card"
+import Select from "../Select/Select"
+import Filter from "../Filter/Filter"
+import {useEffect} from "react";
+import { useNavigate } from "react-router-dom"
 import {ReactComponent as Logo_title} from "../assets/Logos/logo_title.svg"
 import {ReactComponent as Delete_asap} from "../assets/negr.svg"
 import Slider from "react-slick";
@@ -14,7 +18,10 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css"
 
 
+
+
 const Main = () =>{
+    const navigate = useNavigate();
     const PrevArrow = (props) =>{
         const {className, style, onClick} = props;
         return(
@@ -23,6 +30,15 @@ const Main = () =>{
             </div>
         )
     }
+    useEffect(() =>{
+        const token = localStorage.getItem("token");
+        if (!token){
+            navigate("/")
+            console.log("you are not authorized")
+        }
+        console.log("everything is fine salam")
+        console.log(token)
+    }, [])
     const NextArrow = (props) =>{
         const {className, style, onClick} = props;
         return(
@@ -49,6 +65,15 @@ const Main = () =>{
         <Fifth className = "slide"/>
     ]
     
+
+    const aboutRedirect = () =>{
+        navigate("/")
+    }
+
+    const recieptsRedirect = () =>{
+        navigate("/main")
+    }
+    
     
 
     return(
@@ -58,8 +83,8 @@ const Main = () =>{
                     <Logo_title className = "culina-logo"/>
                 </div>
                 <div className="middle-main">
-                    <a href="#">About</a>
-                    <a href="#">Recipes</a>
+                    <a onClick={() => {aboutRedirect()}}>About</a>
+                    <a onClick={() => {recieptsRedirect()}}>Recipes</a>
                     <a href="#">Pricing</a>
                 </div>
                 <div className="user-info">
@@ -92,13 +117,7 @@ const Main = () =>{
                         <input className="recipe-search" type="text" placeholder="search"/>
                     </div>
                     <div className="main-sort-by">
-                        <select name="sort">
-                            <optgroup label="Sort By">
-                                <option value="newest">Newest</option>
-                                <option value="latets">Latest</option>
-                                <option value="rating">Rating</option>
-                            </optgroup>
-                        </select>
+                        <Select values = {["Newest", "Latest", "Rating"]}/>
                     </div>
             </div>
 
@@ -109,22 +128,8 @@ const Main = () =>{
                         <a href="#" className="main-filter-block-clear">clear filters</a>
                     </div>
                     <div className="select-filter">
-                        <div className="choose-filter">
-                            <h2 className="choose-filter-name">Difficult:</h2>
-                            <p>plus</p>
-                        </div>
-                        <div className="choose-filter">
-                            <h2 className="choose-filter-name">Meal:</h2>
-                            <p>plus</p>
-                        </div>
-                        <div className="choose-filter">
-                            <h2 className="choose-filter-name">Time:</h2>
-                            <p>plus</p>
-                        </div>
-                        <div className="choose-filter">
-                            <h2 className="choose-filter-name">Dish-type:</h2>
-                            <p>plus</p>
-                        </div>
+                        <Filter nameFilter="Difficult:" values = {["5 stars", "4 stars", "3 stars", "2 stars", "1 stars"]}/>
+                        <Filter nameFilter="Type:" values = {["Breakfast", "Drink", "Lanch", "Dinner", "Another"]}/>
                     </div>
                 </div>
                 <div className="main-card-block">

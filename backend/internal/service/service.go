@@ -24,26 +24,62 @@ func NewAuthHandler() *AuthHandler{
 	}
 }
 
-func (h *AuthHandler) PostSvg(c *fiber.Ctx) error{
-	if db.DB == nil{
+func (h *AuthHandler) PostCard(c *fiber.Ctx) error {
+	if db.DB == nil {
 		fmt.Printf("DB not initialized")
 		return c.Status(fiber.StatusInternalServerError).SendString("DB not initialized")
 	}
+
+	card := config.Card{}
+	if err := c.BodyParser(&card); err != nil{
+		return c.SendString(err.Error())
+
+	}
 	
-	svgs := config.Svg{}
-	if err := c.BodyParser(&svgs); err != nil{
-		return c.SendString(err.Error())
+	var exists bool
+	err := db.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM cards WHERE dish_name = $1)", card.Dish_name).Scan(&exists)
+	if err != nil && err != sql.ErrNoRows{
+		c.SendString(err.Error())
 	}
-
-	_, err := db.DB.Exec("INSERT INTO svgs (url) VALUES ($1)", svgs.Url)
-	if err != nil {
-		return c.SendString(err.Error())
+	if exists{
+		return c.Status(fiber.StatusConflict).SendString("Dish is already created")
 	}
+	
+	_, err = db.DB.Exec("INSERT INTO cards (dish_name, dish_rating, dish_creator, dish_descr, dish_types) VALUES ($1, $2, $3, $4, $5)", card.Dish_name, card.Dish_rating, card.Dish_creator, card.Dish_descr, card.Dish_types)
+	if err != nil{
+		return c.SendString(err.Error())
 
+	}
 	return c.SendString("Success")
 
 }
 
+func GetAllCards(c *fiber.Ctx) error {
+	if db.DB == nil{
+		fmt.Printf("DB nor initialized")
+		return c.Status(fiber.StatusInternalServerError).SendString("DB not initialized")
+	}
+
+	rows ,err := db.DB.Query("SELECT id, dish_name, dish_rating, dish_creator, dish_descr, dish_types FROM cards")
+
+	if err != nil{
+		return c.SendString(err.Error())
+	}
+	defer rows.Close()
+
+
+	var cards []config.Card
+	for rows.Next(){
+		var card config.Card
+		if err := rows.Scan(&card.Id, &card.Dish_name, &card.Dish_rating, &card.Dish_creator, &card.Dish_descr, &card.Dish_types); err != nil{
+			return c.SendString("Failed to scan rows")
+
+		}
+		cards = append(cards, card)
+	}
+	
+	return c.JSON(cards)
+}
 
 func (h *AuthHandler) Register(c *fiber.Ctx) error{
 	if db.DB == nil{
@@ -56,16 +92,16 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error{
 	}
 
 	var exists bool
-	err := db.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE username = $1)", regReq.Username).Scan(&exists)
+	err := db.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)", regReq.Email).Scan(&exists)
 	if err !=nil && err != sql.ErrNoRows{
 		return c.SendString(err.Error())
 	}
-
+	
 	if exists{
-		return c.Status(fiber.StatusConflict).SendString("User already exists")
+		return c.SendString("E-mail already exists")
 	}
 
-	_, err = db.DB.Exec("INSERT INTO users (username, password) VALUES ($1, $2)", regReq.Username, regReq.Password)
+	_, err = db.DB.Exec("INSERT INTO users (username, password, email) VALUES ($1, $2, $3)", regReq.Username, regReq.Password, regReq.Email)
 	if err != nil{
 		return c.SendString(err.Error())
 	}
@@ -93,8 +129,8 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error{
 	
 	//if noert exists return error
 	//if exists checking password for login
-	if user.Password != regReq.Password {
-		return c.SendString("Password is inccorect")
+	if regReq.Password != user.Password {
+		return c.SendString("Password is incorrect")
 	}
 	//JWT TOKEN CREATING
 
