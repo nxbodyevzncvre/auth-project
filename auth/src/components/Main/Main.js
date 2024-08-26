@@ -2,7 +2,7 @@ import "./Main.css"
 import Card from "./Card/Card"
 import Select from "../Select/Select"
 import Filter from "../Filter/Filter"
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom"
 import {ReactComponent as Logo_title} from "../assets/Logos/logo_title.svg"
 import {ReactComponent as Delete_asap} from "../assets/negr.svg"
@@ -16,14 +16,27 @@ import {ReactComponent as SearchLogo} from "../assets/Logos/search-logo.svg"
 import {AiOutlineArrowLeft, AiOutlineArrowRight} from "react-icons/ai"
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css"
-
+import axios from "axios"
 
 
 
 const Main = () =>{
     const navigate = useNavigate();
+    const [cardInfo, setCardInfo] = useState([]);
+
+    const getCards = () => {
+        try {
+            axios.get("http://localhost:8080/cards")
+            .then(data => {setCardInfo(data.data)})
+        } catch(err) {
+            console.error(err.toJSON())
+        }
+    }
+
+    const dish_name = cardInfo.map(el => {el.dish_name})
+
     const PrevArrow = (props) =>{
-        const {className, style, onClick} = props;
+        const {className, onClick} = props;
         return(
             <div onClick = {onClick} className = {`arrow ${className}`}>
                 <AiOutlineArrowLeft class="arrows" style = {{color: "white"}}/>
@@ -31,6 +44,9 @@ const Main = () =>{
         )
     }
     useEffect(() =>{
+        axios.get("http://localhost:8080/cards")
+            .then(data => {setCardInfo(data.data)})
+
         const token = localStorage.getItem("token")
         if ( token === "undefined" || token === null || !token){
             navigate("/")
@@ -38,7 +54,7 @@ const Main = () =>{
         }
     }, [])
     const NextArrow = (props) =>{
-        const {className, style, onClick} = props;
+        const {className, onClick} = props;
         return(
             <div onClick = {onClick} className = {`arrow ${className}`}>
                 <AiOutlineArrowRight class = "arrows" style = {{color: "white"}}/>
@@ -71,8 +87,7 @@ const Main = () =>{
     const recieptsRedirect = () =>{
         navigate("/main")
     }
-    
-    
+
 
     return(
         <div className="main-window">
@@ -131,7 +146,7 @@ const Main = () =>{
                     </div>
                 </div>
                 <div className="main-card-block">
-                    <Card/>
+                    <Card dish_name={dish_name} dish_rating="" dish_creator="" dish_descr="" dish_types=""/>
                 </div>
             </div>
         </div>

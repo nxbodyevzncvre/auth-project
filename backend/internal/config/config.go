@@ -12,7 +12,6 @@ var JwtSecretKey = []byte("pd[asfckjiogiotijt]")
 var ContextKeyUser = "user"
 
 type (
-
 	User struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
@@ -20,7 +19,7 @@ type (
 	}
 
 	Card struct {
-		Id			 int `json:"id"`
+		Id           int    `json:"id"`
 		Dish_name    string `json:"dish_name"`
 		Dish_rating  int    `json:"dish_rating"`
 		Dish_creator string `json:"dish_creator"`
@@ -28,7 +27,7 @@ type (
 		Dish_types   string `json:"dish_types"`
 	}
 
-	Svg struct{
+	Svg struct {
 		Url string `json:"url"`
 	}
 
@@ -47,7 +46,7 @@ type (
 		Password string
 		Dbname   string
 	}
-	ProfileResponse struct{
+	ProfileResponse struct {
 		Username string `json:"username"`
 	}
 
@@ -55,7 +54,7 @@ type (
 		DB *DBConfig
 	}
 
-	LoginResponse struct{
+	LoginResponse struct {
 		Token string `json:"access_token"`
 	}
 )
@@ -67,9 +66,7 @@ func GetConfig() *Config {
 			Port:     5432,
 			User:     "postgres",
 			Password: "admin",
-			Dbname:   "postgres",
+			Dbname:   "culina",
 		},
 	}
 }
-
-
