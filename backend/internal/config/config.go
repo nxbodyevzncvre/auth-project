@@ -66,7 +66,7 @@ func GetConfig() *Config {
 			Port:     5432,
 			User:     "postgres",
 			Password: "admin",
-			Dbname:   "culina",
+			Dbname:   "postgres",
 		},
 	}
 }

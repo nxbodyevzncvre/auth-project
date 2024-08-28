@@ -1,11 +1,16 @@
 package db
 
 import (
+	"context"
+	"database/sql"
 	"fmt"
 	"log"
-	"database/sql"
+	"os"
+	"time"
 	_ "github.com/lib/pq"
 	"github.com/nxbodyevzncvre/mypackage/internal/config"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var DB *sql.DB
@@ -29,4 +34,20 @@ func Init() error{
 	}
 	log.Println("success")
 	return nil
+}
+func MongoClient() *mongo.Client{
+	serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
+	clientOptions := options.Client().ApplyURI(os.Getenv("MONGO_SRV_RECORD")).SetServerAPIOptions(serverAPIOptions)	
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	client, err := mongo.Connect(ctx, clientOptions)
+	if err != nil{
+		log.Fatal(err)
+	}
+	err = client.Ping(context.TODO(), nil)
+	if err != nil{
+		log.Fatal(err)
+	}
+	return client
+
 }

@@ -5,12 +5,23 @@ import (
 	"fmt"
 	"log"
 	"time"
-
+	"bytes"
+	// "context"
+	"io"
+	// "os"
+	"regexp"
+	"strconv"
+	"github.com/sirupsen/logrus"
 	"github.com/gofiber/fiber/v2"
 	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/nxbodyevzncvre/mypackage/internal/config"
 	"github.com/nxbodyevzncvre/mypackage/internal/db"
-	"github.com/sirupsen/logrus"
+	// "go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/gridfs"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	_ "github.com/joho/godotenv/autoload"	
+
 )
 
 type AuthHandler struct {
@@ -151,7 +162,8 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 }
 
 func JwtPayloadFromRequest(c *fiber.Ctx) (jwt.MapClaims, bool) {
-	jwtToken, ok := c.Context().Value(config.ContextKeyUser).(*jwt.Token)
+	jwtToken, ok := c.Locals(config.ContextKeyUser).(*jwt.Token)
+	
 	if !ok {
 		logrus.WithFields(logrus.Fields{
 			"jwt_token_context_value": c.Context().Value(config.ContextKeyUser),
@@ -196,4 +208,121 @@ func (h *AuthHandler) Profile(c *fiber.Ctx) error {
 	return c.JSON(config.ProfileResponse{
 		Username: username,
 	})
+}
+
+func setResponseHeaders(c *fiber.Ctx, buff bytes.Buffer, ext string) error{
+	switch ext{
+	case ".png":
+		c.Set("Content-Type", "image/png")
+	case ".jpg":
+		c.Set("Content-Type", "image/jpg")
+	case ".jpeg":
+		c.Set("Content-Type", "image/jpeg")
+	}
+	c.Set("Cache-Control", "public, max-age=31536000")
+	c.Set("Content-Length", strconv.Itoa(len(buff.Bytes())))
+	return c.Next()
+}
+
+func PostImg(c *fiber.Ctx) error {
+	fileHeader, err := c.FormFile("image")	
+	if err != nil{
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg": "bad name",
+		})
+	}
+	fileExtension := regexp.MustCompile(`\.[a-zA-Z0-9]+$`).FindString(fileHeader.Filename)
+	if fileExtension != ".jpg" && fileExtension != ".jpeg" && fileExtension != ".png"{
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg": "Invalid file type",
+		})
+	}
+
+	file, err := fileHeader.Open()
+	if err != nil{
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+	defer file.Close()
+
+	content, err := io.ReadAll(file)
+	if err != nil{
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg": err.Error(),
+		})
+	}
+	db := db.MongoClient().Database("culina-image")
+	bucket, err := gridfs.NewBucket(db, options.GridFSBucket().SetName("images"))
+		if err != nil{
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg": "not collection",
+		})
+	}
+	uploadStream, err := bucket.OpenUploadStream(fileHeader.Filename, options.GridFSUpload().SetMetadata(bson.M{"ext": fileExtension}))
+	if err != nil{
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg": err.Error(),
+		})
+	}
+	defer uploadStream.Close()
+
+
+	fileSize, err := uploadStream.Write(content)
+	if err != nil{
+		return c.Status(500).JSON(fiber.Map{
+			"error": true,
+			"msg": err.Error(),
+		})
+	}
+	fieldId := uploadStream.FileID
+
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"error": false,
+		"msg": "File successfully uploaded",
+		"image": fiber.Map{
+				"id": fieldId,
+				"name": fileHeader.Filename,
+				"size": fileSize,
+		}, 
+	})
+}
+
+func GetImg(c *fiber.Ctx) error {
+	name := c.Params("name")
+  
+	db := db.MongoClient().Database("culina-image")
+  
+	var fileMetadata bson.M
+  
+	if err := db.Collection("images.files").FindOne(c.Context(), bson.M{"filename": name}).Decode(&fileMetadata); err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			 "error": true,
+			 "msg":   "Image not found",
+	})
+   }
+ 
+   var buffer bytes.Buffer
+   bucket, _ := gridfs.NewBucket(db, options.GridFSBucket().SetName("images"))
+   if _, err := bucket.DownloadToStreamByName(name, &buffer); err != nil{
+	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		"error": true,
+		"msg": "Could not download the image",
+	})
+   }
+   ext, ok := fileMetadata["metadata"].(bson.M)["ext"].(string)
+   if !ok{
+		ext = ".jpg"
+   }
+
+   setResponseHeaders(c, buffer, ext)
+
+   return c.Send(buffer.Bytes())
+  
 }

@@ -27,7 +27,10 @@ func main() {
 	app.Post("/register", authHandlers.Register)
 	app.Post("/login", authHandlers.Login)
 	app.Post("/create-card", authHandlers.PostCard)
+	app.Post("/post/card-img/:id", service.PostImg)
+
 	app.Get("/cards", service.GetAllCards)
+	app.Get("/get/card-img/:name", service.GetImg)
 	authtorizedGroup := app.Group("")
 	authtorizedGroup.Use(jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{
@@ -35,8 +38,6 @@ func main() {
 		},
 		ContextKey: config.ContextKeyUser,
 	}))
-
 	authtorizedGroup.Get("/profile", authHandlers.Profile)
-
-	app.Listen(":8080")
+	app.Listen("localhost:8080")
 }
