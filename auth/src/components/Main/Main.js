@@ -23,17 +23,17 @@ import axios from "axios"
 const Main = () =>{
     const navigate = useNavigate();
     const [cardInfo, setCardInfo] = useState([]);
-
-    const getCards = () => {
-        try {
-            axios.get("http://localhost:8080/cards")
-            .then(data => {setCardInfo(data.data)})
-        } catch(err) {
-            console.error(err.toJSON())
+    const [username, setUsername] = useState("")
+    const getInfo = async() =>{
+        try{
+            const token = localStorage.getItem("token");
+            const headers = {Authorization: `Bearer ${token}`}
+            const response = await axios.get("http://localhost:8080/profile", {headers})
+            setUsername(response.data.username)
+        }catch(err){                                                                                                                                                                            
+            console.err(err)
         }
     }
-
-    const dish_name = cardInfo.map(el => {el.dish_name})
 
     const PrevArrow = (props) =>{
         const {className, onClick} = props;
@@ -44,14 +44,18 @@ const Main = () =>{
         )
     }
     useEffect(() =>{
-        axios.get("http://localhost:8080/cards")
-            .then(data => {setCardInfo(data.data)})
-
-        const token = localStorage.getItem("token")
-        if ( token === "undefined" || token === null || !token){
-            navigate("/")
-            console.log("you are not authorized")
+        const token = localStorage.getItem("token");
+        if(!token){
+            navigate("/");
+            console.log("you are not authed")
         }
+        getInfo()
+        axios.get("http://localhost:8080/cards")
+            .then(data => setCardInfo(data.data))
+            .catch(err => console.err(err))
+        
+
+        
     }, [])
     const NextArrow = (props) =>{
         const {className, onClick} = props;
@@ -80,14 +84,17 @@ const Main = () =>{
     ]
     
 
-    const aboutRedirect = () =>{
+    const aboutRedirect = () => {
         navigate("/")
     }
 
-    const recieptsRedirect = () =>{
+    const recieptsRedirect = () => {
         navigate("/main")
     }
 
+    const cardRedirect = () => {
+        navigate("/")
+    }
 
     return(
         <div className="main-window">
@@ -106,7 +113,7 @@ const Main = () =>{
 
                     </div>
                     <div className="user-data">
-                        <p className = "user-name">Negr</p>
+                        <p className = "user-name">{username}</p>
                         <p className = "user-amount">12 posts</p>
                     </div>            
                 </div>
@@ -143,10 +150,13 @@ const Main = () =>{
                     <div className="select-filter">
                         <Filter nameFilter="Difficult:" values = {["5 stars", "4 stars", "3 stars", "2 stars", "1 stars"]}/>
                         <Filter nameFilter="Type:" values = {["Breakfast", "Drink", "Lanch", "Dinner", "Another"]}/>
+                        <Filter nameFilter="Time:" values = {["20 min", "30 min", "60 min", "90 min", "120 min", "120 min +"]}/>
                     </div>
                 </div>
-                <div className="main-card-block">
-                    <Card dish_name={dish_name} dish_rating="" dish_creator="" dish_descr="" dish_types=""/>
+                <div className="main-card-block">       
+                    {cardInfo.map(el => {
+                        return <Card dish_name={el.dish_name} dish_rating = {el.dish_rating} dish_creator = {el.dish_creator} dish_descr = {el.dish_descr} dish_types = {el.dish_types}/>
+                    })}
                 </div>
             </div>
         </div>
