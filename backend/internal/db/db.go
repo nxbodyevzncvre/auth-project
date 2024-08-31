@@ -11,6 +11,8 @@ import (
 	"github.com/nxbodyevzncvre/mypackage/internal/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/go-redis/redis/v8"
+
 )
 
 var DB *sql.DB
@@ -49,5 +51,13 @@ func MongoClient() *mongo.Client{
 		log.Fatal(err)
 	}
 	return client
+}
 
+func RedisClient() *redis.Client {
+	client := redis.NewClient(&redis.Options{
+        Addr:      "localhost:6379",
+        Password:"",
+        DB:      0,
+    })
+	return client
 }

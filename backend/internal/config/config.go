@@ -1,5 +1,9 @@
 package config
 
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
+
 const (
 	host     = "localhost"
 	port     = 5432
@@ -15,16 +19,16 @@ type (
 	User struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
-		Email    string `json:"email"`
+		Email 	 string `json:""`		
 	}
 
 	Card struct {
-		Id           int    `json:"id"`
-		Dish_name    string `json:"dish_name"`
-		Dish_rating  int    `json:"dish_rating"`
-		Dish_creator string `json:"dish_creator"`
-		Dish_descr   string `json:"dish_descr"`
-		Dish_types   string `json:"dish_types"`
+		Dish_name    string `bson:"dish_name"`
+		Dish_rating  int    `bson:"dish_rating"`
+		Dish_creator string `bson:"dish_creator"`
+		Dish_descr   string `bson:"dish_descr"`
+		Dish_types   string `bson:"dish_types"`
+		ImageID      primitive.ObjectID `bson:"image_id"`
 	}
 
 	Svg struct {

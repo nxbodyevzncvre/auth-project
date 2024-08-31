@@ -26,11 +26,11 @@ func main() {
 
 	app.Post("/register", authHandlers.Register)
 	app.Post("/login", authHandlers.Login)
-	app.Post("/create-card", authHandlers.PostCard)
-	app.Post("/post/card-img/:id", service.PostImg)
+	app.Post("/create-card", service.PostCard)
 
-	app.Get("/cards", service.GetAllCards)
-	app.Get("/get/card-img/:name", service.GetImg)
+	app.Get("/show-card/:id", service.GetDataCard)
+	app.Get("/show-card-img/:id", service.GetImgCard)
+	app.Get("/redis", service.GetRandomRedisID)
 	authtorizedGroup := app.Group("")
 	authtorizedGroup.Use(jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{

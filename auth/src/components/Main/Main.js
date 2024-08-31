@@ -34,7 +34,6 @@ const Main = () =>{
             console.err(err)
         }
     }
-
     const PrevArrow = (props) =>{
         const {className, onClick} = props;
         return(
@@ -50,9 +49,9 @@ const Main = () =>{
             console.log("you are not authed")
         }
         getInfo()
-        axios.get("http://localhost:8080/cards")
-            .then(data => setCardInfo(data.data))
-            .catch(err => console.err(err))
+        // axios.get("http://localhost:8080/cards")
+        //     .then(data => setCardInfo(data.data))
+        //     .catch(err => console.err(err))
         
 
         

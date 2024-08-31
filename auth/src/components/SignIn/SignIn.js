@@ -31,7 +31,7 @@ const SignIn = () =>{
             }
 
             localStorage.setItem("token", token);
-            axios.defaults.headers.common["Authorization"] = `Bearer $token`;
+            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
             console.log("success")
             navigate("/main")
             //set token to local storage
@@ -39,8 +39,6 @@ const SignIn = () =>{
         }catch(error){
             console.log(`error - ${error}`);
         }
-
-        
     }
     const handleSubmit = (e) =>{
         e.preventDefault();
